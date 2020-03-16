@@ -41,7 +41,7 @@ public class BaseTest {
 			//notifications
 			fxProfile.setPreference("dom.webnotifications.enabled", false);
 			
-			//proxy servers
+			//proxy servers (data center ip address and port)
 			fxProfile.setPreference("network.proxy.type", 1);
 			fxProfile.setPreference("network.proxy.socks", "192.168.90.54");
 			fxProfile.setPreference("network.proxy.socks_port", 1744);
