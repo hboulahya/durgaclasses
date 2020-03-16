@@ -8,6 +8,9 @@ import java.util.Properties;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.firefox.FirefoxProfile;
+import org.openqa.selenium.firefox.internal.ProfilesIni;
 
 public class BaseTest {
 	
@@ -24,12 +27,33 @@ public class BaseTest {
 	}
 	public static void launch(String browser) {
 		if(p.getProperty(browser).equals("chrome")) {
-			System.setProperty("webdriver.chrome.driver", "C:\\Users\\HISHAM\\Desktop\\SeleniumJars\\chromedriver.exe");
+			System.setProperty("webdriver.chrome.driver", projectPath+"\\drivers\\chromedriver.exe");
 			driver = new ChromeDriver();
 			//driver.close();
 		}else if(p.getProperty(browser).equals("firefox")) {
-			System.setProperty("webdriver.gecko.driver", "C:\\Users\\HISHAM\\Desktop\\SeleniumJars\\geckodriver.exe");
-			driver = new FirefoxDriver();
+			
+			System.setProperty(FirefoxDriver.SystemProperty.BROWSER_LOGFILE,"d:\\firefoxlog.txt");//or "null instead of creating a txt file "
+			System.setProperty("webdriver.gecko.driver", projectPath+"\\drivers\\geckodriver.exe");
+			
+			ProfilesIni profile = new ProfilesIni();
+			FirefoxProfile fxProfile = profile.getProfile("automationprofile");
+			
+			//notifications
+			fxProfile.setPreference("dom.webnotifications.enabled", false);
+			
+			//proxy servers
+			fxProfile.setPreference("network.proxy.type", 1);
+			fxProfile.setPreference("network.proxy.socks", "192.168.90.54");
+			fxProfile.setPreference("network.proxy.socks_port", 1744);
+			
+			FirefoxOptions options = new FirefoxOptions();
+			options.setProfile(fxProfile);
+			
+			driver = new FirefoxDriver(options);
+			driver.manage().window().maximize();
+			driver.manage().deleteAllCookies();
+			
+			
 			
 		}
 	}
